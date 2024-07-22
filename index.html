@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#" id="tabMemories" onclick="showTab('memories')">Memories</a></li>
+                <li><a href="#" id="tabMovies" onclick="showTab('movies')">Movies</a></li>
+            </ul>
+        </nav>
+
+        <div id="memories" class="tabContent">
+            <h2>Memories</h2>
+            <div id="memoriesContainer">
+                <!-- Memory boxes will be added here -->
+            </div>
+            <button class="addButton" onclick="addMemoryBox()">Add Memory</button>
+            <button class="saveButton" onclick="saveMemories()">Save Memories</button>
+        </div>
+
+        <div id="movies" class="tabContent" style="display:none;">
+            <h2>Movies</h2>
+            <div id="moviesContainer">
+                <!-- Movie boxes will be added here -->
+            </div>
+            <button class="addButton" onclick="addMovieBox()">Add Movie</button>
+            <button class="saveButton" onclick="saveMovies()">Save Movies</button>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
