@@ -1,51 +1,43 @@
-const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
+const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
-const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect('mongodb://localhost:27017/memories');
+const PORT = process.env.PORT || 3000;
 
-const memorySchema = new mongoose.Schema({
-    imgSrc: String,
-    text: String
+// Replace the following with your MongoDB connection string from the environment variables
+const uri = process.env.MONGODB_URI;
+
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch(err => {
+  console.error('Error connecting to MongoDB', err);
 });
 
-const movieSchema = new mongoose.Schema({
-    movie: String,
-    favoriteLine: String
+// Example schema and model
+const MemorySchema = new mongoose.Schema({
+  image: String,
+  text: String,
 });
 
-const Memory = mongoose.model('Memory', memorySchema);
-const Movie = mongoose.model('Movie', movieSchema);
+const Memory = mongoose.model('Memory', MemorySchema);
 
-app.post('/saveMemories', async (req, res) => {
-    await Memory.deleteMany({});
-    await Memory.insertMany(req.body);
-    res.send({ message: 'Memories saved!' });
+// API route to save memory
+app.post('/api/save', async (req, res) => {
+  const { image, text } = req.body;
+  const newMemory = new Memory({ image, text });
+  await newMemory.save();
+  res.send({ message: 'Memory saved successfully!' });
 });
 
-app.get('/loadMemories', async (req, res) => {
-    const memories = await Memory.find();
-    res.send(memories);
-});
-
-app.post('/saveMovies', async (req, res) => {
-    await Movie.deleteMany({});
-    await Movie.insertMany(req.body);
-    res.send({ message: 'Movies saved!' });
-});
-
-app.get('/loadMovies', async (req, res) => {
-    const movies = await Movie.find();
-    res.send(movies);
-});
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
